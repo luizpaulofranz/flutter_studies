@@ -14,6 +14,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  // key is needed for flutter to properly re-render when data changes
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String _infoText = "Informe seus dados.";
