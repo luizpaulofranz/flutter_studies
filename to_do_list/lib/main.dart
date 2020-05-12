@@ -22,6 +22,16 @@ class _HomeState extends State<Home> {
 
   List _todoList = [];
 
+  @override
+  void initState() {
+    super.initState();
+    this._getData().then((tasksAsJson) {
+      setState(() {
+        _todoList = json.decode(tasksAsJson);
+      });
+    });
+  }
+
   void _addToDo() {
     String task = _todoController.text;
     Map<String, dynamic> newTodo = Map();
@@ -29,6 +39,8 @@ class _HomeState extends State<Home> {
     newTodo["ok"] = false;
     _todoController.text = "";
     setState(() {
+      // to save on device
+      _saveData();
       _todoList.add(newTodo);
     });
   }
@@ -104,6 +116,8 @@ class _HomeState extends State<Home> {
                   onChanged: (checked) {
                     setState(() {
                       _todoList[index]["ok"] = checked;
+                      // to save on device
+                      _saveData();
                     });
                   },
                   secondary: CircleAvatar(
