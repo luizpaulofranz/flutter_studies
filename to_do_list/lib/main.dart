@@ -21,6 +21,9 @@ class _HomeState extends State<Home> {
   final TextEditingController _todoController = TextEditingController();
 
   List _todoList = [];
+  //to handle the undo option
+  Map<String, dynamic> _lastRemoved;
+  int _lastRemovedIndex;
 
   @override
   void initState() {
@@ -66,10 +69,10 @@ class _HomeState extends State<Home> {
     }
   }
 
-  Widget buildListItem(context, index) {
+  Widget buildListItem(BuildContext context, int index) {
     // to add behaviours sliding over some item
     return Dismissible(
-      key: Key(index.toString()),
+      key: UniqueKey(),
       background: Container(
         color: Colors.red,
         child: Align(
@@ -80,7 +83,37 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
+      // here we set de directions that we wish to swipe
+      //direction: DismissDirection.horizontal,
+      // and here we can set the second possible swipe background
+      //secondaryBackground: Container(color: Colors.green),
       direction: DismissDirection.startToEnd,
+      // this function takes the swipped direction, in our case is just one possible, so we dont use it
+      onDismissed: (direction) {
+        // here we delete and show a snackbar
+        setState(() {
+          _lastRemovedIndex = index;
+          _lastRemoved = Map.from(_todoList[index]);
+          _todoList.removeAt(index);
+          _saveData();
+
+          final snack = SnackBar(
+            content: Text("Tarefa \"${_lastRemoved["title"]}\" removida!"),
+            duration: Duration(seconds: 4),
+            action: SnackBarAction(
+              label: "Desfazer",
+              onPressed: () {
+                setState(() {
+                  _todoList.insert(_lastRemovedIndex, _lastRemoved);
+                  _saveData();
+                });
+              },
+            ),
+          );
+
+          Scaffold.of(context).showSnackBar(snack);
+        });
+      },
       // ListTile and CheckboxListTile are defaults list_item in flutter
       child: CheckboxListTile(
         title: Text(_todoList[index]["title"]),
