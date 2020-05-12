@@ -69,6 +69,22 @@ class _HomeState extends State<Home> {
     }
   }
 
+  // here we reordenate the list and simulates a delay
+  Future<void> _refreshTaskList() async {
+    Future.delayed(Duration(milliseconds: 1500));
+    setState(() {
+      _todoList.sort((a, b) {
+        if (a["ok"] && !b["ok"])
+          return 1;
+        else if (!a["ok"] && b["ok"])
+          return -1;
+        else
+          return 0;
+      });
+    });
+    _saveData();
+  }
+
   Widget buildListItem(BuildContext context, int index) {
     // to add behaviours sliding over some item
     return Dismissible(
@@ -111,6 +127,7 @@ class _HomeState extends State<Home> {
             ),
           );
 
+          Scaffold.of(context).removeCurrentSnackBar();
           Scaffold.of(context).showSnackBar(snack);
         });
       },
@@ -170,11 +187,15 @@ class _HomeState extends State<Home> {
             ),
           ),
           Expanded(
-            // we use a ListView.builder() to create our list on demand, the hidden itens wont consume any resource
-            child: ListView.builder(
-              padding: EdgeInsets.only(top: 10),
-              itemCount: _todoList.length,
-              itemBuilder: buildListItem,
+            // to refresh our list when we drag it down
+            child: RefreshIndicator(
+              onRefresh: _refreshTaskList,
+              // we use a ListView.builder() to create our list on demand, the hidden itens wont consume any resource
+              child: ListView.builder(
+                padding: EdgeInsets.only(top: 10),
+                itemCount: _todoList.length,
+                itemBuilder: buildListItem,
+              ),
             ),
           ),
         ],
