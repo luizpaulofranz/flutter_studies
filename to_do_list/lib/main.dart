@@ -66,6 +66,40 @@ class _HomeState extends State<Home> {
     }
   }
 
+  Widget buildListItem(context, index) {
+    // to add behaviours sliding over some item
+    return Dismissible(
+      key: Key(index.toString()),
+      background: Container(
+        color: Colors.red,
+        child: Align(
+          alignment: Alignment(-0.9, 0),
+          child: Icon(
+            Icons.delete,
+            color: Colors.white,
+          ),
+        ),
+      ),
+      direction: DismissDirection.startToEnd,
+      // ListTile and CheckboxListTile are defaults list_item in flutter
+      child: CheckboxListTile(
+        title: Text(_todoList[index]["title"]),
+        value: _todoList[index]["ok"],
+        // called when we check the checkbox item, receives a boolean as parameter
+        onChanged: (checked) {
+          setState(() {
+            _todoList[index]["ok"] = checked;
+            // to save on device
+            _saveData();
+          });
+        },
+        secondary: CircleAvatar(
+          child: Icon(_todoList[index]["ok"] ? Icons.check : Icons.error),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // Scaffold is an base widget from material, which implements some base resources like appBar
@@ -107,25 +141,7 @@ class _HomeState extends State<Home> {
             child: ListView.builder(
               padding: EdgeInsets.only(top: 10),
               itemCount: _todoList.length,
-              itemBuilder: (context, index) {
-                // ListTile and CheckboxListTile are defaults list_item in flutter
-                return CheckboxListTile(
-                  title: Text(_todoList[index]["title"]),
-                  value: _todoList[index]["ok"],
-                  // called when we check the checkbox item, receives a boolean as parameter
-                  onChanged: (checked) {
-                    setState(() {
-                      _todoList[index]["ok"] = checked;
-                      // to save on device
-                      _saveData();
-                    });
-                  },
-                  secondary: CircleAvatar(
-                    child: Icon(
-                        _todoList[index]["ok"] ? Icons.check : Icons.error),
-                  ),
-                );
-              },
+              itemBuilder: buildListItem,
             ),
           ),
         ],
