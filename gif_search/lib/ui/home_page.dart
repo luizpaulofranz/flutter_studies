@@ -29,11 +29,9 @@ class _HomePageState extends State<HomePage> {
     return json.decode(response.body);
   }
 
-  // JUST FOR TEST ABOVE METHOD, REMOVE IT LATTER
-  @override
-  void initState() {
-    super.initState();
-    //_getGifs().then((data) => print(data));
+  //TODO: finalize this code
+  Widget _createGifTable(BuildContext context, AsyncSnapshot snapshot) {
+    return Container();
   }
 
   @override
@@ -66,7 +64,29 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             child: FutureBuilder(
               future: _getGifs(),
-              builder: null,
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                  case ConnectionState.waiting:
+                    return Container(
+                      width: 200,
+                      height: 200,
+                      alignment: Alignment.center,
+                      child: CircularProgressIndicator(
+                        // this is used to change color when loading
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        strokeWidth: 5.0,
+                      ),
+                    );
+                  default:
+                    if (snapshot.hasError)
+                      return Container(
+                        child: Text("Ocorreu um erro =/"),
+                      );
+
+                    return _createGifTable(context, snapshot);
+                }
+              },
             ),
           ),
         ],
