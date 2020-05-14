@@ -13,19 +13,21 @@ class ContactRepository {
   // underscore at the begining makes the variable private
   Database _db;
   Future<Database> get db async {
-    if(_db != null)
+    if (_db != null)
       return _db;
     else
       return _db = await init();
   }
 
   // creates and/or returns our database and table
-  Future<Database> init() async{
+  Future<Database> init() async {
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, "contacts.db");
 
-    return await openDatabase(path, version: 1, onCreate: (Database db, int newerVersion) async {
-      String sql = "CREATE TABLE $tableName (id INTEGER PRIMARY KEY, name TEXT, email TEXT, phone TEXT, imgPath TEXT);";
+    return await openDatabase(path, version: 1,
+        onCreate: (Database db, int newerVersion) async {
+      String sql =
+          "CREATE TABLE $tableName (id INTEGER PRIMARY KEY, name TEXT, email TEXT, phone TEXT, imgPath TEXT);";
       await db.execute(sql);
     });
   }
@@ -46,12 +48,11 @@ class ContactRepository {
 
   Future<Contact> getById(int id) async {
     Database dbContact = await db;
-    List<Map> rows = await dbContact.query(tableName, 
-      columns: ["id", "name", "email", "phone", "imgPath"], 
-      where: "id = ?", 
-      whereArgs: [id]
-    );
-    if(rows.length > 0) {
+    List<Map> rows = await dbContact.query(tableName,
+        columns: ["id", "name", "email", "phone", "imgPath"],
+        where: "id = ?",
+        whereArgs: [id]);
+    if (rows.length > 0) {
       return Contact.fromMap(rows.first);
     }
   }
@@ -63,11 +64,8 @@ class ContactRepository {
 
   Future<int> update(Contact contact) async {
     Database dbContact = await db;
-    return await dbContact.update(tableName, 
-      contact.toMap(), 
-      where: "id = ?", 
-      whereArgs: [contact.id]
-    );
+    return await dbContact.update(tableName, contact.toMap(),
+        where: "id = ?", whereArgs: [contact.id]);
   }
 
   Future<List<Contact>> getAll() async {
@@ -78,15 +76,15 @@ class ContactRepository {
     );
     */
     List<Map> rows = await dbContact.rawQuery("SELECT * FROM $tableName;");
-    if(rows.length > 0) {
-      return rows.map((map) => Contact.fromMap(map));
+    if (rows.length > 0) {
+      return rows.map((map) => Contact.fromMap(map)).toList();
     }
     return null;
   }
 
   Future<int> count() async {
     Database dbContact = await db;
-    return Sqflite.firstIntValue(await dbContact.rawQuery("SELECT COUNT(id) FROM $tableName;"));
+    return Sqflite.firstIntValue(
+        await dbContact.rawQuery("SELECT COUNT(id) FROM $tableName;"));
   }
-
 }
