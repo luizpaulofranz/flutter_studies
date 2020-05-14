@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:gif_search/ui/gif_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:share/share.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -22,7 +23,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<Map> _getGifs() async {
     http.Response response;
-    if (_search == null)
+    if (_search == null || _search.isEmpty)
       response = await http.get(trendingGifsUrl);
     else
       response = await http.get(
@@ -55,19 +56,23 @@ class _HomePageState extends State<HomePage> {
           return GestureDetector(
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          GifPage(gifData: snapshot.data["data"][index])));
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      GifPage(gifData: snapshot.data["data"][index]),
+                ),
+              );
             },
             onLongPress: () {
               Share.share(snapshot.data["data"][index]["images"]["fixed_height"]
                   ["url"]);
             },
-            child: Image.network(
-              snapshot.data["data"][index]["images"]["fixed_height"]["url"],
-              height: 300,
+            child: FadeInImage.memoryNetwork(
+              placeholder: kTransparentImage,
+              image: snapshot.data["data"][index]["images"]["fixed_height"]
+                  ["url"],
               fit: BoxFit.cover,
+              height: 300,
             ),
           );
         } else {
