@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:gif_search/ui/gif_page.dart';
 import 'package:http/http.dart' as http;
+import 'package:share/share.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -51,6 +53,17 @@ class _HomePageState extends State<HomePage> {
         // to put the button that loads more items
         if (_search == null || index < snapshot.data["data"].length) {
           return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          GifPage(gifData: snapshot.data["data"][index])));
+            },
+            onLongPress: () {
+              Share.share(snapshot.data["data"][index]["images"]["fixed_height"]
+                  ["url"]);
+            },
             child: Image.network(
               snapshot.data["data"][index]["images"]["fixed_height"]["url"],
               height: 300,
