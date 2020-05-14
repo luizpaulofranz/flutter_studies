@@ -1,4 +1,4 @@
-name: gif_search
+name: contacts
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -24,12 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^0.1.3
-  # for share options
-  share: ^0.6.1+1
-  # to have transparency on images, used un fadeIn efect
-  transparent_image: ^1.0.0
-  # HTTP requests
-  http: ^0.12.0+2
+  sqflite: any
 
 dev_dependencies:
   flutter_test:
