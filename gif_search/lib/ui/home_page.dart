@@ -24,14 +24,67 @@ class _HomePageState extends State<HomePage> {
       response = await http.get(trendingGifsUrl);
     else
       response = await http.get(
-          "https://api.giphy.com/v1/gifs/search?api_key=qDpZI23fCCocn0Co831jNndZkCkQNYih&q=$_search&limit=20&offset=$_offset&rating=G&lang=en");
+          "https://api.giphy.com/v1/gifs/search?api_key=qDpZI23fCCocn0Co831jNndZkCkQNYih&q=$_search&limit=19&offset=$_offset&rating=G&lang=en");
 
     return json.decode(response.body);
   }
 
-  //TODO: finalize this code
+  int _getItensCount(List data) {
+    if (_search == null) {
+      return data.length;
+    } else {
+      return data.length + 1;
+    }
+  }
+
   Widget _createGifTable(BuildContext context, AsyncSnapshot snapshot) {
-    return Container();
+    // this is an interesting option to create grids, see also
+    return GridView.builder(
+      padding: EdgeInsets.all(10),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+      ),
+      itemCount: _getItensCount(snapshot.data["data"]),
+      itemBuilder: (context, index) {
+        // to put the button that loads more items
+        if (_search == null || index < snapshot.data["data"].length) {
+          return GestureDetector(
+            child: Image.network(
+              snapshot.data["data"][index]["images"]["fixed_height"]["url"],
+              height: 300,
+              fit: BoxFit.cover,
+            ),
+          );
+        } else {
+          return Container(
+            child: GestureDetector(
+              onTap: () {
+                // we increase the offset and triggers rerunning of build method, whi has a FutureBuilder that makes the request again
+                setState(() {
+                  _offset += 19;
+                });
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                    Icons.add,
+                    color: Colors.white,
+                    size: 70,
+                  ),
+                  Text(
+                    "Carregar mais ...",
+                    style: TextStyle(color: Colors.white, fontSize: 22),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+      },
+    );
   }
 
   @override
@@ -59,9 +112,17 @@ class _HomePageState extends State<HomePage> {
               ),
               style: TextStyle(color: Colors.white, fontSize: 18),
               textAlign: TextAlign.center,
+              // when we click on done ate keyboard, receiving text typed as param
+              onSubmitted: (text) {
+                setState(() {
+                  _search = text;
+                  _offset = 0;
+                });
+              },
             ),
           ),
           Expanded(
+            // every time that build method runs, this is runned again
             child: FutureBuilder(
               future: _getGifs(),
               builder: (context, snapshot) {
