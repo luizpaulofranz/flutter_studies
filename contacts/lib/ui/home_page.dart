@@ -6,6 +6,9 @@ import 'package:contacts/ui/contact_page.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+// possible ordenation options
+enum OrderOptions { orderaz, orderza }
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -57,64 +60,83 @@ class _HomePageState extends State<HomePage> {
       context: context,
       builder: (context) {
         return BottomSheet(
-            onClosing: () {},
-            builder: (context) {
-              return Container(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  // to set size of our colum
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: FlatButton(
-                        child: Text(
-                          "Ligar",
-                          style: TextStyle(color: Colors.red, fontSize: 20),
-                        ),
-                        onPressed: () {
-                          // to open urls, including own device options, like tel:
-                          String url = "tel:${contacts[index].phone}";
-                          //canLaunch(url).then((value) => print(value)); //debig reasons
+          onClosing: () {},
+          builder: (context) {
+            return Container(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                // to set size of our colum
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FlatButton(
+                      child: Text(
+                        "Ligar",
+                        style: TextStyle(color: Colors.red, fontSize: 20),
+                      ),
+                      onPressed: () {
+                        // to open urls, including own device options, like tel:
+                        String url = "tel:${contacts[index].phone}";
+                        print("DEBUG:");
+                        //canLaunch(url).then((value) => print(value)); // debug reasons
+                        launch(url);
+                        Navigator.pop(context); // to close modal
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FlatButton(
+                      child: Text(
+                        "Editar",
+                        style: TextStyle(color: Colors.red, fontSize: 20),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context); // to close modal
+                        _showContactPage(contact: contacts[index]);
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FlatButton(
+                      child: Text(
+                        "Excluir",
+                        style: TextStyle(color: Colors.red, fontSize: 20),
+                      ),
+                      onPressed: () {
+                        repository.delete(contacts[index].id);
+                        setState(() {
+                          contacts.removeAt(index);
                           Navigator.pop(context); // to close modal
-                        },
-                      ),
+                        });
+                      },
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: FlatButton(
-                        child: Text(
-                          "Editar",
-                          style: TextStyle(color: Colors.red, fontSize: 20),
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context); // to close modal
-                          _showContactPage(contact: contacts[index]);
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: FlatButton(
-                        child: Text(
-                          "Excluir",
-                          style: TextStyle(color: Colors.red, fontSize: 20),
-                        ),
-                        onPressed: () {
-                          repository.delete(contacts[index].id);
-                          setState(() {
-                            contacts.removeAt(index);
-                            Navigator.pop(context); // to close modal
-                          });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            });
+                  ),
+                ],
+              ),
+            );
+          },
+        );
       },
     );
+  }
+
+  void _orderContactList(OrderOptions ordenation) {
+    switch (ordenation) {
+      case OrderOptions.orderaz:
+        contacts.sort((a, b) {
+          return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+        });
+        break;
+      case OrderOptions.orderza:
+        contacts.sort((a, b) {
+          return b.name.toLowerCase().compareTo(a.name.toLowerCase());
+        });
+        break;
+    }
+    setState(() {});
   }
 
   Widget _contactCard(BuildContext context, int index) {
@@ -175,6 +197,22 @@ class _HomePageState extends State<HomePage> {
         title: Text("Contatos"),
         backgroundColor: Colors.red,
         centerTitle: true,
+        actions: <Widget>[
+          // creates a pop-up menu, opened on the three dots
+          PopupMenuButton<OrderOptions>(
+            onSelected: _orderContactList,
+            itemBuilder: (context) => <PopupMenuEntry<OrderOptions>>[
+              const PopupMenuItem<OrderOptions>(
+                child: Text("Ordenar A-Z"),
+                value: OrderOptions.orderaz,
+              ),
+              const PopupMenuItem<OrderOptions>(
+                child: Text("Ordenar Z-A"),
+                value: OrderOptions.orderza,
+              ),
+            ],
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
