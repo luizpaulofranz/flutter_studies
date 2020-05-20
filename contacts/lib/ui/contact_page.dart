@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:contacts/model/contact.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ContactPage extends StatefulWidget {
   final Contact contact;
@@ -100,6 +101,17 @@ class _ContactPageState extends State<ContactPage> {
           child: Column(
             children: <Widget>[
               GestureDetector(
+                onTap: () {
+                  // this is not working in IOS because permissions are needed
+                  //ImagePicker.pickImage(source: ImageSource.camera)
+                  ImagePicker.pickImage(source: ImageSource.gallery)
+                      .then((file) {
+                    if (file == null) return;
+                    setState(() {
+                      _editedContact.imgPath = file.path;
+                    });
+                  });
+                },
                 child: Container(
                   height: 140,
                   width: 140,

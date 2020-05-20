@@ -4,6 +4,7 @@ import 'package:contacts/model/contact.dart';
 import 'package:contacts/repository/contact_repository.dart';
 import 'package:contacts/ui/contact_page.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -24,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   void _loadAllContacts() {
     repository.getAll().then((value) {
       setState(() {
-        contacts = value;
+        contacts = value ?? [];
       });
     });
   }
@@ -71,7 +72,12 @@ class _HomePageState extends State<HomePage> {
                           "Ligar",
                           style: TextStyle(color: Colors.red, fontSize: 20),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          // to open urls, including own device options, like tel:
+                          String url = "tel:${contacts[index].phone}";
+                          //canLaunch(url).then((value) => print(value)); //debig reasons
+                          Navigator.pop(context); // to close modal
+                        },
                       ),
                     ),
                     Padding(
