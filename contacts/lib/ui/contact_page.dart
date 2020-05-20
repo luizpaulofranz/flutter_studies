@@ -17,6 +17,8 @@ class _ContactPageState extends State<ContactPage> {
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
 
+  final _nameFocus = FocusNode();
+
   Contact _editedContact;
   bool _dirty = false;
 
@@ -44,7 +46,16 @@ class _ContactPageState extends State<ContactPage> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.save),
-        onPressed: () {},
+        onPressed: () {
+          // a really simple form validation, only name is required
+          if (_editedContact.name != null && _editedContact.name.isNotEmpty) {
+            // we can pass data through pages
+            Navigator.pop(context, _editedContact);
+          } else {
+            // to set focus on the name field
+            FocusScope.of(context).requestFocus(_nameFocus);
+          }
+        },
         backgroundColor: Colors.red,
       ),
       // SingleChildScrollView to ensure that the page can be scrolled
@@ -68,6 +79,8 @@ class _ContactPageState extends State<ContactPage> {
               ),
             ),
             TextField(
+              // to controll the field focus
+              focusNode: _nameFocus,
               controller: _nameController,
               decoration: InputDecoration(labelText: "Nome"),
               onChanged: (text) {

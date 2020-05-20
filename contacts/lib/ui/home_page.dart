@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:contacts/model/contact.dart';
 import 'package:contacts/repository/contact_repository.dart';
+import 'package:contacts/ui/contact_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,16 +18,43 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    this._loadAllContacts();
+  }
+
+  void _loadAllContacts() {
     repository.getAll().then((value) {
-      print(value);
       setState(() {
         contacts = value;
       });
     });
   }
 
+  void _showContactPage({Contact contact}) async {
+    // we can receive the entitiy back when we call Navigator.pop, but when we tap back button, the return is null
+    final contactToSave = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ContactPage(
+          contact: contact,
+        ),
+      ),
+    );
+
+    if (contactToSave != null) {
+      if (contact != null) {
+        await repository.update(contactToSave);
+      } else {
+        await repository.save(contactToSave);
+      }
+      _loadAllContacts();
+    }
+  }
+
   Widget _contactCard(BuildContext context, int index) {
     return GestureDetector(
+      onTap: () {
+        _showContactPage(contact: contacts[index]);
+      },
       child: Card(
         child: Padding(
           padding: EdgeInsets.all(10),
@@ -82,7 +110,9 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          _showContactPage();
+        },
         child: Icon(Icons.add),
         backgroundColor: Colors.red,
       ),
