@@ -23,17 +23,35 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   String _animation = "Spin";
+  bool _isPaused = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Container(
-          height: 200,
-          width: 200,
-          child: FlareActor(
-            "assets/spinGear.flr",
-            animation: _animation,
+      body: GestureDetector(
+        onTap: () {
+          setState(() {
+            if (_animation == "Spin") {
+              _animation = "antiSpin";
+            } else {
+              _animation = "Spin";
+            }
+          });
+        },
+        onDoubleTap: () {
+          setState(() {
+            _isPaused = !_isPaused;
+          });
+        },
+        child: Center(
+          child: Container(
+            height: 200,
+            width: 200,
+            child: FlareActor(
+              "assets/spinGear.flr",
+              animation: _animation,
+              isPaused: _isPaused,
+            ),
           ),
         ),
       ),
