@@ -11,8 +11,9 @@ abstract class _LoginStore with Store {
   _LoginStore() {
     // autoRun is an action executed whenever any state has changed
     autorun((_){
-      print(email);
-      print(password);
+      //print(email);
+      //print(password);
+      //print(isFormValid);
     });
   }
 
@@ -29,5 +30,17 @@ abstract class _LoginStore with Store {
 
   @action
   void setPassword(String value) => password = value;
+
+  // are values that will be calculated from existing state, and whenever the state changes, it'll be re-runned
+  // works in a similar way to observables, they are like "variables" but derived from states
+  @computed
+  bool get isEmailValid => RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);
+
+  @computed
+  bool get isPasswordValid => password.length >= 6;
+
+  // we can combine different computed values
+  @computed
+  bool get isFormValid => isEmailValid && isPasswordValid;
 
 }

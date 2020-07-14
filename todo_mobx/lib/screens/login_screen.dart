@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:todomobx/stores/login_store.dart';
 import 'package:todomobx/widgets/custom_icon_button.dart';
 import 'package:todomobx/widgets/custom_text_field.dart';
@@ -13,7 +14,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
-  // and here we can use our actions just calling them, as we do in onChange of CustomTextFields above
+  // here we can use our actions just calling them, as we do in onChange of CustomTextFields bellow
   LoginStore loginStore = LoginStore();
 
   @override
@@ -56,22 +57,28 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 16,),
-                    SizedBox(
-                      height: 44,
-                      child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(32),
-                        ),
-                        child: Text('Login'),
-                        color: Theme.of(context).primaryColor,
-                        disabledColor: Theme.of(context).primaryColor.withAlpha(100),
-                        textColor: Colors.white,
-                        onPressed: (){
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(builder: (context)=>ListScreen())
-                          );
-                        },
-                      ),
+                    // this is a widget whuch reacts to changes in any @observable/@computed (state) and re-builds its content
+                    Observer(
+                      builder: (context) {
+                        return SizedBox(
+                          height: 44,
+                          child: RaisedButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(32),
+                            ),
+                            child: Text('Login'),
+                            color: Theme.of(context).primaryColor,
+                            disabledColor: Theme.of(context).primaryColor.withAlpha(100),
+                            textColor: Colors.white,
+                            // if this param is null, the button becomes "disabled"
+                            onPressed: loginStore.isFormValid ? (){
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(builder: (context)=>ListScreen())
+                              );
+                            } : null,
+                          ),
+                        );
+                      }
                     )
                   ],
                 ),
