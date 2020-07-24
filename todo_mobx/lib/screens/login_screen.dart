@@ -57,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 16,),
-                    // this is a widget whuch reacts to changes in any @observable/@computed (state) and re-builds its content
+                    // this is a widget which reacts to changes in any @observable/@computed (state) and re-builds its content
                     Observer(
                       builder: (context) {
                         return SizedBox(
