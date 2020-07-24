@@ -24,12 +24,18 @@ abstract class _LoginStore with Store {
   @observable
   String password = "";
 
+  @observable
+  bool passwordVisible = false;
+
   // this give us a way to change state
   @action
   void setEmail(String value) => email = value;
 
   @action
   void setPassword(String value) => password = value;
+
+  @action
+  void togglePasswordVisibility() => passwordVisible = !passwordVisible;
 
   // are values that will be calculated from existing state, and whenever the state changes, it'll be re-runned
   // works in a similar way to observables, they are like "variables" but derived from states
