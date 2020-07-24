@@ -27,6 +27,9 @@ abstract class _LoginStore with Store {
   @observable
   bool passwordVisible = false;
 
+  @observable
+  bool loading = false;
+
   // this give us a way to change state
   @action
   void setEmail(String value) => email = value;
@@ -36,6 +39,15 @@ abstract class _LoginStore with Store {
 
   @action
   void togglePasswordVisibility() => passwordVisible = !passwordVisible;
+
+  @action
+  Future<void> login() async {
+    loading = true;
+
+    await Future.delayed(Duration(seconds: 5));
+
+    loading = false;
+  }
 
   // are values that will be calculated from existing state, and whenever the state changes, it'll be re-runned
   // works in a similar way to observables, they are like "variables" but derived from states
@@ -47,6 +59,6 @@ abstract class _LoginStore with Store {
 
   // we can combine different computed values
   @computed
-  bool get isFormValid => isEmailValid && isPasswordValid;
+  Function get loginPressed => (isEmailValid && isPasswordValid && !loading) ? login : null;
 
 }
