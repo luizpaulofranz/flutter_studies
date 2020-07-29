@@ -17,7 +17,7 @@ abstract class _LoginStore with Store {
     });
   }
 
-  // this indicates that this is a STATE
+  // this indicates that this is a STATE, it is called core state
   @observable
   String email = "";
 
@@ -55,6 +55,7 @@ abstract class _LoginStore with Store {
 
   // are values that will be calculated from existing state, and whenever the state changes, it'll be re-runned
   // works in a similar way to observables, they are like "variables" but derived from states
+  // it is called derived state
   @computed
   bool get isEmailValid => RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);
 
