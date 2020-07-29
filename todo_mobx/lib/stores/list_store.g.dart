@@ -46,6 +46,17 @@ mixin _$ListStore on _ListStore, Store {
   }
 
   @override
+  void addTodo() {
+    final _$actionInfo =
+        _$_ListStoreActionController.startAction(name: '_ListStore.addTodo');
+    try {
+      return super.addTodo();
+    } finally {
+      _$_ListStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 newTodoTitle: ${newTodoTitle},
