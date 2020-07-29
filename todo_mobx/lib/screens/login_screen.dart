@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:todomobx/stores/login_store.dart';
 import 'package:todomobx/widgets/custom_icon_button.dart';
 import 'package:todomobx/widgets/custom_text_field.dart';
@@ -16,6 +17,35 @@ class _LoginScreenState extends State<LoginScreen> {
 
   // here we can use our actions just calling them, as we do in onChange of CustomTextFields bellow
   LoginStore loginStore = LoginStore();
+
+  ReactionDisposer reactionDisposer;
+
+  // a good place to put auto-run codes. Like componentDidMount from react
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // we can use the autorun mobx function anywhere we have access to our store, like here!
+    // it works the same way as on login_store, when any observable/state changes, it is executed
+    /*autorun((_){
+      if(loginStore.loggedIn)
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => ListScreen())
+        );
+    });*/
+
+    // a mobx callback function for a specific observable/state change, the first param is the state watched, the second is the callback
+    // it will be watching forever, so its important to do a dispose in reaction functions, see bellow the widget dispose method
+    reactionDisposer = reaction(
+      (_) => loginStore.loggedIn, 
+      (loggedIn) {
+        if(loginStore.loggedIn)
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => ListScreen())
+          );
+      }
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -92,4 +122,12 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    // to unasign our reaction with the state
+    reactionDisposer();
+    super.dispose();
+  }
+
 }
