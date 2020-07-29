@@ -30,6 +30,9 @@ abstract class _LoginStore with Store {
   @observable
   bool loading = false;
 
+  @observable
+  bool loggedIn = false;
+
   // this give us a way to change state
   @action
   void setEmail(String value) => email = value;
@@ -44,9 +47,10 @@ abstract class _LoginStore with Store {
   Future<void> login() async {
     loading = true;
 
-    await Future.delayed(Duration(seconds: 5));
+    await Future.delayed(Duration(seconds: 2));
 
     loading = false;
+    loggedIn = true;
   }
 
   // are values that will be calculated from existing state, and whenever the state changes, it'll be re-runned
@@ -57,7 +61,7 @@ abstract class _LoginStore with Store {
   @computed
   bool get isPasswordValid => password.length >= 6;
 
-  // we can combine different computed values
+  // we can combine different computed values and return any type
   @computed
   Function get loginPressed => (isEmailValid && isPasswordValid && !loading) ? login : null;
 
