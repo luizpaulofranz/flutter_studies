@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
+import 'package:provider/provider.dart';
 import 'package:todomobx/stores/login_store.dart';
 import 'package:todomobx/widgets/custom_icon_button.dart';
 import 'package:todomobx/widgets/custom_text_field.dart';
@@ -16,7 +17,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
 
   // here we can use our actions just calling them, as we do in onChange of CustomTextFields bellow
-  LoginStore loginStore = LoginStore();
+  LoginStore loginStore;
 
   ReactionDisposer reactionDisposer;
 
@@ -24,6 +25,10 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
+    // that's how we get our instance from provider
+    loginStore = Provider.of<LoginStore>(context);
+
     // we can use the autorun mobx function anywhere we have access to our store, like here!
     // it works the same way as on login_store, when any observable/state changes, it is executed
     /*autorun((_){
