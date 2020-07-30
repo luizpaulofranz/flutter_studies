@@ -51,6 +51,9 @@ abstract class _LoginStore with Store {
 
     loading = false;
     loggedIn = true;
+
+    email = "";
+    password = "";
   }
 
   // are values that will be calculated from existing state, and whenever the state changes, it'll be re-runned
@@ -65,5 +68,10 @@ abstract class _LoginStore with Store {
   // we can combine different computed values and return any type
   @computed
   Function get loginPressed => (isEmailValid && isPasswordValid && !loading) ? login : null;
+
+  @action
+  void logout() {
+    loggedIn = false;
+  }
 
 }
