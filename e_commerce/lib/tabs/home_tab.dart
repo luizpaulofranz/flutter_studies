@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class HomeTab extends StatelessWidget {
 
@@ -49,9 +51,28 @@ class HomeTab extends StatelessWidget {
                       ),
                     ),
                   );
+
                 else {
-                  print(snapshot.data.documents.length);
-                  return SliverToBoxAdapter(child: Container());
+                  // mounts our home page images grid, is an awesome Widget!
+                  return SliverStaggeredGrid.count(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 1,
+                    crossAxisSpacing: 1,
+                    staggeredTiles: List<StaggeredTile>.from(snapshot.data.documents.map(
+                      (doc) {
+                        return StaggeredTile.count(doc.data["x"], doc.data["y"]);
+                      }
+                    ).toList()),
+                    children: List<Widget>.from(snapshot.data.documents.map(
+                      (doc) { 
+                        return FadeInImage.memoryNetwork(
+                          placeholder: kTransparentImage, 
+                          image: doc.data["image"],
+                          fit: BoxFit.cover,
+                        );
+                      }
+                    ).toList()),
+                  );
                 }
               },
             )
