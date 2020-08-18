@@ -1,4 +1,5 @@
 import 'package:e_commerce/tabs/home_tab.dart';
+import 'package:e_commerce/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -11,7 +12,11 @@ class HomeScreen extends StatelessWidget {
       controller: _pageController,
       physics: NeverScrollableScrollPhysics(),
       children: <Widget>[
-        HomeTab()
+        Scaffold(
+          body: HomeTab(),
+          // drawer is that lateral left menu
+          drawer: CustomDrawer(),
+        ),
       ],
     );
   }
