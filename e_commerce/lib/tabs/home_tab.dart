@@ -53,7 +53,7 @@ class HomeTab extends StatelessWidget {
                   );
 
                 else {
-                  // mounts our home page images grid, is an awesome Widget!
+                  // mounts our home page images grid, it is an awesome Widget!
                   return SliverStaggeredGrid.count(
                     crossAxisCount: 2,
                     mainAxisSpacing: 1,
