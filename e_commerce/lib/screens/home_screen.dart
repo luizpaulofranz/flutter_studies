@@ -15,7 +15,7 @@ class HomeScreen extends StatelessWidget {
         Scaffold(
           body: HomeTab(),
           // drawer is that lateral left menu
-          drawer: CustomDrawer(),
+          drawer: CustomDrawer(_pageController),
         ),
       ],
     );

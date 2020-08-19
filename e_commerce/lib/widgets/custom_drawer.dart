@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 
 class CustomDrawer extends StatelessWidget {
 
+  final PageController _pageController;
+
+  CustomDrawer(this._pageController);
+
   Widget _buildDrawerBackgroud() {
     return Container(
       decoration: BoxDecoration(
@@ -64,10 +68,10 @@ class CustomDrawer extends StatelessWidget {
                 ),
               ),
               Divider(),
-              DrawerTile(icon: Icons.home, text: "Início"),
-              DrawerTile(icon: Icons.list, text: "Produtos"),
-              DrawerTile(icon: Icons.location_on, text: "Lojas"),
-              DrawerTile(icon: Icons.playlist_add_check, text: "Meus Pedidos"),
+              DrawerTile(icon: Icons.home, text: "Início", pageController: _pageController, page: 0),
+              DrawerTile(icon: Icons.list, text: "Produtos", pageController: _pageController, page: 1),
+              DrawerTile(icon: Icons.location_on, text: "Lojas", pageController: _pageController, page: 2),
+              DrawerTile(icon: Icons.playlist_add_check, text: "Meus Pedidos", pageController: _pageController, page: 3),
             ],
           ),
         ],
