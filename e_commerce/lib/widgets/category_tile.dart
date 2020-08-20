@@ -1,3 +1,4 @@
+import 'package:e_commerce/screens/category_screen.dart';
 import 'package:flutter/material.dart';
 
 class CategoryTile extends StatelessWidget {
@@ -17,7 +18,11 @@ class CategoryTile extends StatelessWidget {
       ),
       title: Text(category["title"]),
       trailing: Icon(Icons.keyboard_arrow_right),
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => CategoryScreen(category: category))
+        );
+      },
     );
   }
 }
