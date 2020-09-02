@@ -1,3 +1,4 @@
+import 'package:e_commerce/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -19,7 +20,11 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             textColor: Colors.white,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => SignUpScreen())
+              );
+            },
           ),
         ],
       ),
