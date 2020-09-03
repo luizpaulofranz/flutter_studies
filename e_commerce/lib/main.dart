@@ -10,6 +10,9 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // all the child nodes of this ScopedModel now can access the model User like a singleton, 
+    // using the ScopedModelDescendant<User> Widget, and there we can manipulate our model (User)
+    // look at User model de function notifyListeners().
     return ScopedModel<User>(
       model: User(),
       child: MaterialApp(
