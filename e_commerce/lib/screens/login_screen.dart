@@ -3,13 +3,38 @@ import 'package:e_commerce/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
 
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  
   final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final _emailController = TextEditingController();
+  final _passController = TextEditingController();
+
+  void _onLoginSuccess() {
+    Navigator.of(context).pop();
+  }
+
+  void _onLoginFail() {
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        content: Text("Falha ao realizar login, tente novamente mais tarde!"),
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.red,
+      )
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text("Entrar"),
         centerTitle: true,
@@ -41,6 +66,7 @@ class LoginScreen extends StatelessWidget {
               padding: EdgeInsets.all(16),
               children: [
                 TextFormField(
+                  controller: _emailController,
                   decoration: InputDecoration(
                     hintText: "E-mail"
                   ),
@@ -51,6 +77,7 @@ class LoginScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 16),
                 TextFormField(
+                  controller: _passController,
                   decoration: InputDecoration(
                     hintText: "Senha"
                   ),
@@ -73,9 +100,13 @@ class LoginScreen extends StatelessWidget {
                   child: RaisedButton(
                     onPressed: () {
                       if(_formKey.currentState.validate()) {
-                        // do login
+                        model.signIn(
+                          email: _emailController.text,
+                          pass: _passController.text,
+                          onFail: _onLoginFail,
+                          onSucess: _onLoginSuccess,
+                        );
                       }
-                      model.signIn();
                     },
                     child: Text(
                       "Entrar",
