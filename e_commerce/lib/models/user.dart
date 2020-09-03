@@ -9,13 +9,31 @@ class User extends Model {
   FirebaseUser firebaseUser;
   Map<String, dynamic> userData = Map();
 
-
   bool isLoading = false;
+
+  // this is a callback function, it will be called every time mode changes, this part needs to be revisited and improved
+  // this was added to set user data on app opening
+  @override
+  void addListener(VoidCallback listener) {
+    super.addListener(listener);
+
+    _loadUserData();
+  }
 
   Future _saveUserData(Map<String, dynamic> userData) async {
     this.userData = userData;
     // with this, we save data on firebase database, this is because FirebaseAuth only saves the user e-mail, and with this we sava aditional data.
     await Firestore.instance.collection("users").document(firebaseUser.uid).setData(userData);
+  }
+
+  Future _loadUserData() async {
+    if(firebaseUser == null)
+      firebaseUser = await _auth.currentUser();
+
+    if(firebaseUser != null) {
+      DocumentSnapshot userSnapshot = await Firestore.instance.collection("users").document(firebaseUser.uid).get();
+      userData = userSnapshot.data;
+    }
   }
 
   void signUp({@required Map<String, dynamic> userData, @required String pass, @required VoidCallback onSuccess, @required VoidCallback onFail}) {
@@ -42,15 +60,29 @@ class User extends Model {
     });
   }
 
-  void signIn() async {
+  void signIn({@required String email, @required String pass, VoidCallback onSucess, VoidCallback onFail}) async {
     isLoading = true;
     // this command forces reload on our ScopedModelDescendents Widgets
     notifyListeners();
 
-    await Future.delayed(Duration(seconds: 3));
+    _auth.signInWithEmailAndPassword(
+      email: email, 
+      password: pass,
+    ).then((user) async {
+      firebaseUser = user.user;
 
-    isLoading = false;
-    notifyListeners();
+      await _loadUserData();
+      
+      onSucess();
+
+      isLoading = false;
+      notifyListeners();
+    }).catchError((e) {
+      onFail();
+
+      isLoading = false;
+      notifyListeners();
+    });
   }
 
   void signOut() async {
