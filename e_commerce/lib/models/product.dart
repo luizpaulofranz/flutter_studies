@@ -22,4 +22,12 @@ class Product {
     sizes = document.data["sizes"];
   }
 
+  Map<String, dynamic> toResumedMap() {
+    return {
+      "title": title,
+      "description": description,
+      "price": price
+    };
+  }
+
 }
