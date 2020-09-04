@@ -22,11 +22,15 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _onLoginFail() {
+    _showSnackBar("Falha ao realizar login, tente novamente mais tarde!", true);
+  }
+
+  void _showSnackBar(String message, bool isError) {
     _scaffoldKey.currentState.showSnackBar(
       SnackBar(
-        content: Text("Falha ao realizar login, tente novamente mais tarde!"),
+        content: Text(message),
         duration: Duration(seconds: 2),
-        backgroundColor: Colors.red,
+        backgroundColor: isError ? Colors.red : Theme.of(context).primaryColor,
       )
     );
   }
@@ -89,7 +93,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: FlatButton(
-                    onPressed: () {}, 
+                    onPressed: () {
+                      if(_emailController.text.isEmpty)
+                        _showSnackBar("Insira um e-mail para recuperar a senha!", true);
+                      else {
+                        model.recoverPass(_emailController.text);
+                        _showSnackBar("Confira seu e-mail!", false);
+                      }
+                    }, 
                     child: Text("Esqueci minha senha", textAlign: TextAlign.right),
                     padding: EdgeInsets.zero,
                   ),
