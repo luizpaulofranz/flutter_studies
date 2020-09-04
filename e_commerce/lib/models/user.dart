@@ -3,6 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
+/*
+ *  This class uses ScopedModel (extends Model part), is used to provide methods and data over the widget tree.
+ */
 class User extends Model {
 
   FirebaseAuth _auth = FirebaseAuth.instance;
