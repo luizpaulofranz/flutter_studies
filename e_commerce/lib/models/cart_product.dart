@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commerce/models/cart.dart';
 import 'package:e_commerce/models/product.dart';
 
 /*
@@ -15,6 +16,15 @@ class CartProduct {
   String size;
 
   Product product;
+
+  CartProduct({
+    this.id,
+    this.category,
+    this.product_id,
+    this.quantity,
+    this.size,
+    this.product
+  });
 
   CartProduct.fromDocument(DocumentSnapshot cartProductDocument){
     id = cartProductDocument.documentID;
