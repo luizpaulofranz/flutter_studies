@@ -14,6 +14,9 @@ class User extends Model {
 
   bool isLoading = false;
 
+  // thats how we build our own "of" method
+  static User of(BuildContext context) => ScopedModel.of<User>(context);
+
   // this is a callback function, it will be called every time mode changes, this part needs to be revisited and improved
   // this was added to set user data on app opening
   @override
