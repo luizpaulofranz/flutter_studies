@@ -43,7 +43,12 @@ class CategoryScreen extends StatelessWidget {
                   padding: EdgeInsets.all(4),
                   itemCount: snapshot.data.documents.length,
                   itemBuilder: (context, index) {
-                    return ProductTile(type: "grid", product: Product.fromDocument(snapshot.data.documents[index]));
+                    Product productData = Product.fromDocument(snapshot.data.documents[index]);
+                    productData.category = categorySnapshot.documentID;
+                    return ProductTile(
+                      type: "grid", 
+                      product: productData,
+                    );
                   },
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     // number of grid coluns
@@ -59,7 +64,12 @@ class CategoryScreen extends StatelessWidget {
                   padding: EdgeInsets.all(4),
                   itemCount: snapshot.data.documents.length,
                   itemBuilder: (context, index) {
-                    return ProductTile(type: "list", product: Product.fromDocument(snapshot.data.documents[index]));
+                    Product productData = Product.fromDocument(snapshot.data.documents[index]);
+                    productData.category = categorySnapshot.documentID;
+                    return ProductTile(
+                      type: "list", 
+                      product: productData,
+                    );
                   },
                 ),
               ],
