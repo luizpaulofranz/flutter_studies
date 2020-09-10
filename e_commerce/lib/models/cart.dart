@@ -13,6 +13,8 @@ class Cart extends Model {
 
   List<CartProduct> products = [];
 
+  bool isLoading = false;
+
   Cart(this.user);
 
   // thats how we build our own "of" method
