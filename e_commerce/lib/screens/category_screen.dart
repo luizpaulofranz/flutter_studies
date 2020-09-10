@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce/models/product.dart';
+import 'package:e_commerce/widgets/cart_button.dart';
 import 'package:e_commerce/widgets/product_tile.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,7 @@ class CategoryScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        floatingActionButton: CartButton(),
         appBar: AppBar(
           title: Text(categorySnapshot.data["title"]),
           centerTitle: true,
