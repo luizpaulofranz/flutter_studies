@@ -40,6 +40,8 @@ class User extends Model {
       DocumentSnapshot userSnapshot = await Firestore.instance.collection("users").document(firebaseUser.uid).get();
       userData = userSnapshot.data;
     }
+
+    notifyListeners();
   }
 
   void signUp({@required Map<String, dynamic> userData, @required String pass, @required VoidCallback onSuccess, @required VoidCallback onFail}) {

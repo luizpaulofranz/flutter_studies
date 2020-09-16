@@ -88,7 +88,7 @@ class CartTile extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: product.product == null ?
         FutureBuilder<DocumentSnapshot>(
-          future: Firestore.instance.collection("products").document(product.product.id).get(),
+          future: Firestore.instance.collection("products").document(product.category).collection("items").document(product.product_id).get(),
           builder: (context, snapshot) {
             if(snapshot.hasData) {
               product.product = Product.fromDocument(snapshot.data);
