@@ -2,6 +2,7 @@ import 'package:e_commerce/models/cart.dart';
 import 'package:e_commerce/models/user.dart';
 import 'package:e_commerce/screens/login_screen.dart';
 import 'package:e_commerce/widgets/cart_tile.dart';
+import 'package:e_commerce/widgets/discount_cart.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -75,7 +76,12 @@ class CartScreen extends StatelessWidget {
 
           // it is good when we have a list both vertical and horizontal and it is scrollabe
           return ListView(
-            children: model.products.map((p) => CartTile(p)).toList(),
+            children: [
+              Column(
+                children: model.products.map((p) => CartTile(p)).toList(),
+              ),
+              DiscountCart(),
+            ]
           );
         },
       ),
