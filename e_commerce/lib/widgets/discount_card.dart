@@ -4,7 +4,7 @@ import 'package:e_commerce/models/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class DiscountCart extends StatelessWidget {
+class DiscountCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
