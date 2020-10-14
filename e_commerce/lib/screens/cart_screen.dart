@@ -1,6 +1,7 @@
 import 'package:e_commerce/models/cart.dart';
 import 'package:e_commerce/models/user.dart';
 import 'package:e_commerce/screens/login_screen.dart';
+import 'package:e_commerce/widgets/cart_price_card.dart';
 import 'package:e_commerce/widgets/cart_tile.dart';
 import 'package:e_commerce/widgets/discount_card.dart';
 import 'package:e_commerce/widgets/ship_card.dart';
@@ -83,6 +84,9 @@ class CartScreen extends StatelessWidget {
               ),
               DiscountCard(),
               ShipCard(),
+              CartPriceCard(() {
+                print("Compra finalizada!");
+              }),
             ]
           );
         },
