@@ -84,8 +84,12 @@ class CartScreen extends StatelessWidget {
               ),
               DiscountCard(),
               ShipCard(),
-              CartPriceCard(() {
-                print("Compra finalizada!");
+              CartPriceCard(() async {
+                String orderId = await Cart.of(context).orderCart();
+                if(orderId != null)
+                  print(orderId);
+                else
+                  print("Error");
               }),
             ]
           );
