@@ -11,6 +11,9 @@ class CartTile extends StatelessWidget {
   CartTile(this.product);
 
   Widget _buildContent(BuildContext context) {
+    // to update subtotal on cart page
+    Cart.of(context).updatePrices();
+
     return Row(
       children: [
         Container(
