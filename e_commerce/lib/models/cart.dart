@@ -99,6 +99,7 @@ class Cart extends Model {
     return 9.99;
   }
 
+  // finishes the cart into an order and really do the purchase
   Future<String> orderCart() async {
     if(products.length == 0) return null;
 
