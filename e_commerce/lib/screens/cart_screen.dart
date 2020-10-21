@@ -1,6 +1,7 @@
 import 'package:e_commerce/models/cart.dart';
 import 'package:e_commerce/models/user.dart';
 import 'package:e_commerce/screens/login_screen.dart';
+import 'package:e_commerce/screens/order_success_screen.dart';
 import 'package:e_commerce/widgets/cart_price_card.dart';
 import 'package:e_commerce/widgets/cart_tile.dart';
 import 'package:e_commerce/widgets/discount_card.dart';
@@ -87,9 +88,9 @@ class CartScreen extends StatelessWidget {
               CartPriceCard(() async {
                 String orderId = await Cart.of(context).orderCart();
                 if(orderId != null)
-                  print(orderId);
-                else
-                  print("Error");
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => OrderSuccessScreen(orderId))
+                  );
               }),
             ]
           );
