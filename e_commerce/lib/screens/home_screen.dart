@@ -1,5 +1,6 @@
 import 'package:e_commerce/tabs/home_tab.dart';
 import 'package:e_commerce/tabs/orders_tab.dart';
+import 'package:e_commerce/tabs/places_tab.dart';
 import 'package:e_commerce/tabs/products_tab.dart';
 import 'package:e_commerce/widgets/cart_button.dart';
 import 'package:e_commerce/widgets/custom_drawer.dart';
@@ -30,7 +31,15 @@ class HomeScreen extends StatelessWidget {
           floatingActionButton: CartButton(),
           body: ProductsTab(),
         ),
-        Container(color: Colors.yellow),
+        Scaffold(
+          appBar: AppBar(
+            title: Text("Lojas"),
+            centerTitle: true,
+          ),
+          drawer: CustomDrawer(_pageController),
+          floatingActionButton: CartButton(),
+          body: PlacesTab(),
+        ),
         Scaffold(
           appBar: AppBar(
             title: Text("Meus Pedidos"),
