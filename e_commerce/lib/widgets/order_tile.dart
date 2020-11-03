@@ -23,6 +23,8 @@ class OrderTile extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
 
+            int status = snapshot.data["status"];
+
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -33,6 +35,30 @@ class OrderTile extends StatelessWidget {
                 SizedBox(height: 4),
                 Text(
                   _buildProductText(snapshot.data),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  "Status do Pedido",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 4),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildStatusCircle("1", "Preparação", status, 1),
+                    Container(
+                      height: 1,
+                      width: 30,
+                      color: Colors.grey[500],
+                    ),
+                    _buildStatusCircle("2", "Transporte", status, 2),
+                    Container(
+                      height: 1,
+                      width: 30,
+                      color: Colors.grey[500],
+                    ),
+                    _buildStatusCircle("3", "Entrega", status, 3),
+                  ],
                 ),
               ],
             );
@@ -49,5 +75,39 @@ class OrderTile extends StatelessWidget {
     }
     productDescription += "Total: ${snapshot.data['total'].toStringAsFixed(2)}";
     return productDescription;
+  }
+
+  Widget _buildStatusCircle(String title, String subtitle, int status, int thisStatus ) {
+    Color backColor;
+    Widget child;
+
+    if(status < thisStatus) {
+      backColor = Colors.grey[500];
+      child = Text(title, style: TextStyle(color: Colors.white));
+    } else if( status == thisStatus) {
+      backColor = Colors.blue;
+      child = Stack(
+        alignment: Alignment.center,
+        children: [
+          Text(title, style: TextStyle(color: Colors.white)),
+          CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          ),
+        ],
+      );
+    } else {
+      backColor = Colors.green;
+      child = Icon(Icons.check, color: Colors.white);
+    }
+
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 20,
+          backgroundColor: backColor,
+          child: child,
+        ),
+      ],
+    );
   }
 }
