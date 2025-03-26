@@ -1,6 +1,11 @@
 # Countries App
 
-This is a study Flutter project focused on studing Flutter Bloc / Cubits and also navigations with auto_route package.
+This is a study Flutter project focused on studing Flutter Bloc / Cubits and also navigations with [auto_route](https://pub.dev/packages/auto_route) package.
+
+It works on mobile and web with complex objects as params through the screens. See the "Nested Routes" option.
+
+<img width="482" alt="image" src="https://github.com/user-attachments/assets/4a742b50-8a1d-4134-94a4-74e377771645" />
+
 
 ## Getting Started
 
