@@ -1,6 +1,6 @@
 # Countries App
 
-This is a study Flutter project with a proposal for a Clean Arch approach based on the [Reso Coder Clean Arch](https://resocoder.com/flutter-clean-architecture-tdd/) approach and an MVVM approach in the presentation Layer.
+This is a study Flutter project focused on studing Flutter Bloc / Cubits and also navigations with auto_route package.
 
 ## Getting Started
 
